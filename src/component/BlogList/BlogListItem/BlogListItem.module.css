@@ -1,0 +1,24 @@
+.container {
+	cursor: pointer;
+	width: 900px;
+	display: flex;
+	justify-content: space-between;
+	border: 1px solid lightgrey;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.container:hover {
+	box-shadow: 5px 5px #bdbcbc;
+}
+
+.profile {
+	min-width: 200px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.description {
+}
