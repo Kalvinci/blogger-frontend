@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import BlogView from '../BlogView/BlogView';
+import Button from 'react-bootstrap/Button';
+import CommentController from "../CommentController/CommentController";
 import axios from "../../AxiosInstance";
 
-function BlogPage() {
-	const { blogId } = useParams();
-	console.log(blogId);
-	return <Blog blogId={blogId} />;
-}
-
-class Blog extends Component {
+class BlogPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { blogData: null }
@@ -20,21 +16,31 @@ class Blog extends Component {
 	}
 
 	getBlogData = async () => {
-		console.log(this.props.blogId);
 		const { data } = await axios.get(`/blogs/${this.props.blogId}`);
-		console.log(data);
 		this.setState({ blogData: { ...data } })
 	};
 
+	editBlog = () => {
+		this.props.navigate(`/edit/${this.props.blogId}`);
+	}
+
 	render() {
 		return (
-			<div style={{ display: "flex", justifyContent: "center" }}>
-				<div style={{ width: "1080px" }}>
+			<div style={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}>
+				<div style={{ width: "1080px", position: "relative" }}>
+					<Button variant="link" style={{ position: "absolute", top: "5px", right: "-115px" }} onClick={this.editBlog}>Edit Blog</Button>
 					<BlogView {...this.state.blogData} />
+					<CommentController blogId={this.props.blogId} />
 				</div>
 			</div>
 		);
 	}
 }
 
-export default BlogPage;
+function BlogPageWrapper() {
+	const { blogId } = useParams();
+	const navigate = useNavigate();
+	return <BlogPage blogId={blogId} navigate={navigate} />;
+}
+
+export default BlogPageWrapper;

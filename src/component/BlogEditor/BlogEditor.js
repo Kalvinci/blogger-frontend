@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useNavigate, useParams } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -15,8 +16,21 @@ class BlogEditor extends Component {
 	constructor(props) {
 		super(props);
 		this.editor = null;
-		this.state = { profilePicUrl: "", username: "", email: "", keywords: "", title: "", subTitle: "", content: "" }
+		this.state = { profilePicUrl: "", username: "", email: "", keywords: "", title: "", subTitle: "", content: "" };
+		this.editMode = false
 	}
+
+	componentDidMount() {
+		if (this.props.blogId) {
+			this.getBlogData();
+			this.editMode = true;
+		}
+	}
+
+	getBlogData = async () => {
+		const { data } = await axios.get(`/blogs/${this.props.blogId}`);
+		this.setState({ ...data });
+	};
 
 	onUserNameChange = event => {
 		this.setState({ username: event.target.value });
@@ -57,10 +71,15 @@ class BlogEditor extends Component {
 	}
 
 	onPublish = async () => {
-		console.log("called")
-		const data = { ...this.state }
-		const result = await axios.post("/publish", data);
-		console.log(result);
+		const blogId = this.props.blogId;
+		const data = { ...this.state, id: blogId }
+		if (this.editMode) {
+			await axios.post("/edit", data);
+			this.props.navigate(`/blogs/${blogId}`);
+		} else {
+			await axios.post("/publish", data);
+			this.props.navigate("/");
+		}
 	}
 
 	render() {
@@ -72,7 +91,7 @@ class BlogEditor extends Component {
 							<Row className="mb-3">
 								<Form.Group as={Col} controlId="UserName">
 									<Form.Label>User Name</Form.Label>
-									<Form.Control type="text" placeholder="Enter Name" value={this.state.userName} onChange={this.onUserNameChange} />
+									<Form.Control type="text" placeholder="Enter Name" value={this.state.username} onChange={this.onUserNameChange} />
 								</Form.Group>
 								<Form.Group as={Col} controlId="email">
 									<Form.Label>Email</Form.Label>
@@ -99,6 +118,7 @@ class BlogEditor extends Component {
 								<Form.Label>Content</Form.Label>
 								<CKEditor
 									editor={ClassicEditor}
+									data={this.state.content}
 									config={{ placeholder: "Type your content here..." }}
 									onChange={this.onContentChange}
 								/>
@@ -132,4 +152,10 @@ class BlogEditor extends Component {
 	}
 }
 
-export default BlogEditor;
+function BlogEditorwrapper(props) {
+	const { blogId } = useParams();
+	const navigate = useNavigate();
+	return <BlogEditor {...props} navigate={navigate} blogId={blogId} />;
+};
+
+export default BlogEditorwrapper;

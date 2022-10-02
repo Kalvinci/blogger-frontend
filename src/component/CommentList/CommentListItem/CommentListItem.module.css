@@ -1,0 +1,14 @@
+.container {
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding: 20px 0;
+	border-bottom: 1px solid lightgrey;
+}
+
+.profile {
+}
+
+.content {
+	margin-left: 15px;
+}

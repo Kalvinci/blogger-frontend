@@ -14,6 +14,7 @@ class App extends Component {
                 <Routes>
                     <Route path="/" element={<BlogList />} />
                     <Route path="/compose" element={<BlogEditor />} />
+                    <Route path="/edit/:blogId" element={<BlogEditor />} />
                     <Route path="/blogs/:blogId" element={<BlogPage />} />
                 </Routes>
             </Stack >

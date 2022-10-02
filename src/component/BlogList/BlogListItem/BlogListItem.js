@@ -13,7 +13,7 @@ function BlogListItem(props) {
 			</div>
 			<div className={styles.description}>
 				<h3>{props.title}</h3>
-				<div>{props.subTitle}</div>
+				<div style={{ fontSize: "large" }}>{props.subTitle}</div>
 				<div style={{ marginTop: "5px" }}>In this article: <span style={{ color: "grey" }}>{props.keywords}</span></div>
 			</div>
 		</div>

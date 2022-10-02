@@ -25,7 +25,7 @@ class BlogList extends Component {
 			blogsList.push(<Link to={`/blogs/${blogData.id}`} key={blogData.id} style={{ textDecoration: "none", color: "black" }}><BlogListItem {...blogData} /></Link>)
 		}
 		return (
-			<Stack gap={3} className="mx-auto">
+			<Stack gap={3} className="mx-auto" style={{ marginBottom: "20px" }}>
 				{blogsList}
 			</Stack>
 		);

@@ -8,7 +8,7 @@ function BlogView(props) {
     return (
         <Stack gap={2}>
             <h1>{props.title}</h1>
-            <span>{props.subTitle}</span>
+            <div style={{ fontSize: "large" }}>{props.subTitle}</div>
             <div className={blogStyles.container} style={{ margin: "15px 0" }}>
                 <div style={{ width: "20%", padding: "0 5px" }}>
                     <div className={blogStyles.profileContainer}>
