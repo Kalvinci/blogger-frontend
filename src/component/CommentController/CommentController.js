@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Stack from 'react-bootstrap/Stack';
-import CommentList from "../CommentList/CommentList";
+import CommentList from "./CommentList/CommentList";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from "../../AxiosInstance";

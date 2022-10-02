@@ -1,4 +1,4 @@
-import default_img from "../../../defaultProfileImage.jpg";
+import default_img from "../../../../defaultProfileImage.jpg";
 import styles from "./CommentListItem.module.css";
 
 function BlogListItem(props) {
