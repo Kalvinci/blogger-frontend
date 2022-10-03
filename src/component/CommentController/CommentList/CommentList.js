@@ -7,7 +7,7 @@ function BlogList(props) {
 		commentList.push(<CommentListItem key={commentData.id} {...commentData} />)
 	}
 	return (
-		<Stack gap={3}>
+		<Stack gap={2}>
 			{commentList}
 		</Stack>
 	);

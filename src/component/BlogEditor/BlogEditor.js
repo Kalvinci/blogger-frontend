@@ -8,16 +8,26 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import axios from "../../AxiosInstance";
+import axios from "axios";
 import BlogView from "../BlogView/BlogView";
 import editorStyles from "./BlogEditor.module.css";
+import Cookies from 'js-cookie';
 
 class BlogEditor extends Component {
 	constructor(props) {
 		super(props);
 		this.editor = null;
 		this.state = { profilePicUrl: "", username: "", email: "", keywords: "", title: "", subTitle: "", content: "" };
-		this.editMode = false
+		this.editMode = false;
+		this.checkLogin();
+	}
+
+	checkLogin = () => {
+		this.userData = Cookies.get('userdata');
+		this.isLoggedIn = !!this.userData;
+		if (this.isLoggedIn) {
+			this.userData = JSON.parse(this.userData);
+		}
 	}
 
 	componentDidMount() {
@@ -25,12 +35,17 @@ class BlogEditor extends Component {
 			this.getBlogData();
 			this.editMode = true;
 		}
+		if (this.isLoggedIn) {
+			this.setState({ profilePicUrl: this.userData.profilePicUrl, username: this.userData.name, email: this.userData.email });
+		} else {
+			this.props.navigate("/login");
+		}
 	}
 
 	getBlogData = async () => {
 		const { data } = await axios.get(`/blogs/${this.props.blogId}`);
 		this.setState({ ...data });
-	};
+	}
 
 	onUserNameChange = event => {
 		this.setState({ username: event.target.value });
@@ -70,49 +85,36 @@ class BlogEditor extends Component {
 		return currentDateTime.toLocaleTimeString();
 	}
 
-	onPublish = async () => {
+	onPublish = async (event) => {
+		event.preventDefault();
 		const blogId = this.props.blogId;
-		const data = { ...this.state, id: blogId }
+		const blogData = { ...this.state, id: blogId }
 		if (this.editMode) {
-			await axios.post("/edit", data);
+			await axios.post("/edit", blogData);
 			this.props.navigate(`/blogs/${blogId}`);
 		} else {
-			await axios.post("/publish", data);
-			this.props.navigate("/");
+			const { data } = await axios.post("/publish", blogData);
+			this.props.navigate(`/blogs/${data.blogId}`);
 		}
 	}
 
 	render() {
 		return (
-			<Container style={{ width: "1080px" }}>
+			<Container style={{ width: "1080px", marginBottom: "20px" }}>
 				<Row>
 					<Col>
-						<Form>
-							<Row className="mb-3">
-								<Form.Group as={Col} controlId="UserName">
-									<Form.Label>User Name</Form.Label>
-									<Form.Control type="text" placeholder="Enter Name" value={this.state.username} onChange={this.onUserNameChange} />
-								</Form.Group>
-								<Form.Group as={Col} controlId="email">
-									<Form.Label>Email</Form.Label>
-									<Form.Control type="email" placeholder="Enter Email" value={this.state.email} onChange={this.onEmailChange} />
-								</Form.Group>
-								<Form.Group as={Col} controlId="profilePicURL">
-									<Form.Label>Image URL</Form.Label>
-									<Form.Control type="text" placeholder="Enter URL" value={this.state.profilePicUrl} onChange={this.onProfilePicUrlChange} />
-								</Form.Group>
-							</Row>
+						<Form onSubmit={this.onPublish}>
 							<Form.Group className="mb-3" controlId="Title">
 								<Form.Label>Title</Form.Label>
-								<Form.Control type="text" placeholder="Enter Title" value={this.state.title} onChange={this.onTitleChange} />
+								<Form.Control type="text" placeholder="Enter Title" value={this.state.title} onChange={this.onTitleChange} required />
 							</Form.Group>
 							<Form.Group className="mb-3" controlId="Sub-Title">
 								<Form.Label>Sub-Title</Form.Label>
-								<Form.Control type="text" placeholder="Enter Sub-Title" value={this.state.subTitle} onChange={this.onSubTitleChange} />
+								<Form.Control type="text" placeholder="Enter Sub-Title" value={this.state.subTitle} onChange={this.onSubTitleChange} required />
 							</Form.Group>
 							<Form.Group className="mb-3" controlId="keywords">
 								<Form.Label>Keywords</Form.Label>
-								<Form.Control type="text" placeholder="Enter keywords" value={this.state.keywords} onChange={this.onKeywordsChange} />
+								<Form.Control type="text" placeholder="Enter keywords" value={this.state.keywords} onChange={this.onKeywordsChange} required />
 							</Form.Group>
 							<Form.Group className="mb-3" controlId="Content">
 								<Form.Label>Content</Form.Label>
@@ -123,28 +125,28 @@ class BlogEditor extends Component {
 									onChange={this.onContentChange}
 								/>
 							</Form.Group>
+							<Row>
+								<Col>
+									<Card className={editorStyles.previewCard}>
+										<Card.Header>
+											<Container>
+												<Row className="align-items-center">
+													<Col>
+														<h5>Live Preview</h5>
+													</Col>
+													<Col style={{ textAlign: "right" }}>
+														<Button variant="primary" type="submit">Publish</Button>
+													</Col>
+												</Row>
+											</Container>
+										</Card.Header>
+										<Card.Body>
+											<BlogView {...this.state} date={this.getCurrentDateString()} time={this.getCurrentTimeString()} />
+										</Card.Body>
+									</Card>
+								</Col>
+							</Row>
 						</Form>
-					</Col>
-				</Row>
-				<Row>
-					<Col>
-						<Card className={editorStyles.previewCard}>
-							<Card.Header>
-								<Container>
-									<Row className="align-items-center">
-										<Col>
-											<h5>Live Preview</h5>
-										</Col>
-										<Col style={{ textAlign: "right" }}>
-											<Button variant="primary" onClick={this.onPublish}>Publish</Button>
-										</Col>
-									</Row>
-								</Container>
-							</Card.Header>
-							<Card.Body>
-								<BlogView {...this.state} date={this.getCurrentDateString()} time={this.getCurrentTimeString()} />
-							</Card.Body>
-						</Card>
 					</Col>
 				</Row>
 			</Container >

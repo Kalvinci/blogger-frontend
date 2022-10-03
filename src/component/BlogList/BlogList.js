@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Stack from 'react-bootstrap/Stack';
 import BlogListItem from './BlogListItem/BlogListItem';
-import axios from "../../AxiosInstance";
+import axios from "axios";
 import { Link } from "react-router-dom";
 
 class BlogList extends Component {

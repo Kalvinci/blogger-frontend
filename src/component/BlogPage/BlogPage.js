@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import BlogView from '../BlogView/BlogView';
-import Button from 'react-bootstrap/Button';
 import CommentController from "../CommentController/CommentController";
-import axios from "../../AxiosInstance";
+import axios from "axios";
 
 class BlogPage extends Component {
 	constructor(props) {
@@ -20,17 +19,14 @@ class BlogPage extends Component {
 		this.setState({ blogData: { ...data } })
 	};
 
-	editBlog = () => {
-		this.props.navigate(`/edit/${this.props.blogId}`);
-	}
-
 	render() {
 		return (
 			<div style={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}>
-				<div style={{ width: "1080px", position: "relative" }}>
-					<Button variant="link" style={{ position: "absolute", top: "5px", right: "-115px" }} onClick={this.editBlog}>Edit Blog</Button>
+				<div style={{ width: "1080px" }}>
 					<BlogView {...this.state.blogData} />
-					<CommentController blogId={this.props.blogId} />
+					<div style={{ width: "900px" }}>
+						<CommentController blogId={this.props.blogId} navigate={this.props.navigate} />
+					</div>
 				</div>
 			</div>
 		);

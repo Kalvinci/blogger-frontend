@@ -10,7 +10,7 @@ function BlogListItem(props) {
 			</div>
 			<div className={styles.content}>
 				<h6>{props.username}</h6>
-				<div style={{ fontSize: "12px", margin: "0 0 10px 0" }}>{props.dateTime}</div>
+				<div style={{ fontSize: "12px", margin: "-5px 0 10px 0" }}>{props.dateTime}</div>
 				<div>{props.content}</div>
 			</div>
 		</div>

@@ -14,6 +14,7 @@ function BlogView(props) {
                     <div className={blogStyles.profileContainer}>
                         <img style={{ borderRadius: "50%", width: "96px" }} src={profileImage} alt="Profile" />
                         <h5 style={{ margin: "5px 0", textAlign: "center" }}>{props.username}</h5>
+                        <div style={{ marginTop: "-5px", textAlign: "center" }}>{props.email}</div>
                         <div style={{ margin: "5px 0", textAlign: "center" }}>{props.date}</div>
                         <div style={{ marginBottom: "5px", textAlign: "center" }}>{props.time}</div>
                         <div style={{ margin: "5px 0", paddingTop: "5px", borderTop: "1px solid" }}>In this article: <span style={{ color: "grey" }}>{props.keywords}</span></div>
