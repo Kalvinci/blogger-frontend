@@ -11,6 +11,7 @@ import Form from 'react-bootstrap/Form';
 import axios from "axios";
 import BlogView from "../BlogView/BlogView";
 import editorStyles from "./BlogEditor.module.css";
+import "./CKEditorConfig.css";
 import Cookies from 'js-cookie';
 
 class BlogEditor extends Component {
@@ -109,7 +110,7 @@ class BlogEditor extends Component {
 								<CKEditor
 									editor={ClassicEditor}
 									data={this.state.content}
-									config={{ placeholder: "Type your content here..." }}
+									config={{ placeholder: "Type your content here...", removePlugins: ["EasyImage", "ImageUpload", "MediaEmbed"] }}
 									onChange={this.onContentChange}
 								/>
 							</Form.Group>

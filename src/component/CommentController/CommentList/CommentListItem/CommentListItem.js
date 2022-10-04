@@ -53,7 +53,7 @@ class BlogListItem extends Component {
 	render() {
 		const profileImage = this.props.profilePicUrl ? this.props.profilePicUrl : default_img;
 		let controls = null;
-		if (this.userData.id === this.props.userId) {
+		if (this.isLoggedIn && this.userData.id === this.props.userId) {
 			controls = <div style={{ position: "absolute", top: 20, right: 0 }}>
 				<Button variant="link" style={{ padding: "0 5px", fontSize: "12px" }} onClick={this.onEditComment}>Edit</Button>
 				<Button variant="link" style={{ padding: "0 5px", fontSize: "12px" }} onClick={this.onDeleteComment}>Delete</Button>
