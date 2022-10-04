@@ -4,11 +4,13 @@
 	align-items: flex-start;
 	padding: 20px 0;
 	border-bottom: 1px solid lightgrey;
+	position: relative;
 }
 
 .profile {
 }
 
-.content {
+.body {
 	margin-left: 15px;
+	flex-grow: 1;
 }

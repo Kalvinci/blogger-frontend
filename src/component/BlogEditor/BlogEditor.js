@@ -17,7 +17,7 @@ class BlogEditor extends Component {
 	constructor(props) {
 		super(props);
 		this.editor = null;
-		this.state = { profilePicUrl: "", username: "", email: "", keywords: "", title: "", subTitle: "", content: "" };
+		this.state = { keywords: "", title: "", subTitle: "", content: "" };
 		this.editMode = false;
 		this.checkLogin();
 	}
@@ -45,18 +45,6 @@ class BlogEditor extends Component {
 	getBlogData = async () => {
 		const { data } = await axios.get(`/blogs/${this.props.blogId}`);
 		this.setState({ ...data });
-	}
-
-	onUserNameChange = event => {
-		this.setState({ username: event.target.value });
-	}
-
-	onEmailChange = event => {
-		this.setState({ email: event.target.value });
-	}
-
-	onProfilePicUrlChange = event => {
-		this.setState({ profilePicUrl: event.target.value });
 	}
 
 	onKeywordsChange = event => {
@@ -88,12 +76,12 @@ class BlogEditor extends Component {
 	onPublish = async (event) => {
 		event.preventDefault();
 		const blogId = this.props.blogId;
-		const blogData = { ...this.state, id: blogId }
+		const blogData = { ...this.state, blogId, userId: this.userData.id }
 		if (this.editMode) {
-			await axios.post("/edit", blogData);
+			await axios.patch("/blogs", blogData);
 			this.props.navigate(`/blogs/${blogId}`);
 		} else {
-			const { data } = await axios.post("/publish", blogData);
+			const { data } = await axios.post("/blogs", blogData);
 			this.props.navigate(`/blogs/${data.blogId}`);
 		}
 	}

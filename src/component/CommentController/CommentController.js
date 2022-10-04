@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 class CommentController extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { comments: [], username: "", content: "" }
+		this.state = { comments: [], content: "" }
 		this.checkLogin();
 	}
 
@@ -26,7 +26,7 @@ class CommentController extends Component {
 	}
 
 	getCommentList = async () => {
-		const { data } = await axios.get(`/comments/${this.props.blogId}`);
+		const { data } = await axios.get(`/blogs/${this.props.blogId}/comments`);
 		this.setState({ comments: [...data] })
 	};
 
@@ -36,9 +36,9 @@ class CommentController extends Component {
 
 	onPostComment = async event => {
 		event.preventDefault();
-		const data = { email: this.userData.email, content: this.state.content, blogId: this.props.blogId }
-		await axios.post("/comment", data);
-		this.setState({ username: "", content: "" });
+		const data = { userId: this.userData.id, content: this.state.content, blogId: this.props.blogId }
+		await axios.post(`/blogs/${this.props.blogId}/comments`, data);
+		this.setState({ content: "" });
 		this.getCommentList();
 	}
 
@@ -67,7 +67,7 @@ class CommentController extends Component {
 					</Form.Group>
 					{commentPostButton}
 				</Form>
-				<CommentList comments={this.state.comments} />
+				<CommentList comments={this.state.comments} blogId={this.props.blogId} getCommentList={this.getCommentList} />
 			</Stack>
 		);
 	}

@@ -32,7 +32,7 @@ class BlogsManager extends Component {
 	}
 
 	getBlogList = async () => {
-		const { data } = await axios.get(`/userblogs/${this.userData.email}`);
+		const { data } = await axios.get(`/users/${this.userData.id}/blogs`);
 		this.setState({ blogs: [...data] })
 	};
 
@@ -41,9 +41,8 @@ class BlogsManager extends Component {
 	}
 
 	deleteBlog = async blogId => {
-		await axios.post("/delete", { blogId });
+		await axios.delete(`/blogs/${blogId}`);
 		this.getBlogList();
-		this.props.navigate("/myblogs");
 	}
 
 	render() {
