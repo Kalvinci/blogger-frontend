@@ -110,7 +110,7 @@ class BlogEditor extends Component {
 								<CKEditor
 									editor={ClassicEditor}
 									data={this.state.content}
-									config={{ placeholder: "Type your content here...", removePlugins: ["EasyImage", "ImageUpload", "MediaEmbed"] }}
+									config={{ placeholder: "Type your content here...", removePlugins: ["EasyImage"] }}
 									onChange={this.onContentChange}
 								/>
 							</Form.Group>
